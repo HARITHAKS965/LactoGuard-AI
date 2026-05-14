@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685203300793",
+    "project_id": "lactoguard-ai",
+    "storage_bucket": "lactoguard-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685203300793:android:ae0889e86372e533b41668",
+        "android_client_info": {
+          "package_name": "com.example.lactoguard_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-1Z1ytHAThpm2VX4rq0WrRXbC2nw1vgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

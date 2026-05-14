@@ -1,0 +1,19 @@
+{
+  "app_title": "LactoGuard AI",
+  "detect_adulteration": "Detect Milk Adulteration",
+  "subtitle": "AI-powered purity analysis for milk powder products",
+  "enter_product": "Enter milk product name",
+  "analyze": "Analyze Now",
+  "features": "Smart Features",
+  "barcode_verify": "Barcode Verify",
+  "brand_compare": "Brand Compare",
+  "nearby_labs": "Nearby Labs",
+  "scan_history": "Scan History",
+  "purity_score": "Purity Score",
+  "risk_level": "Risk Level",
+  "possible_issues": "Possible Issues",
+  "health_risks": "Health Risks",
+  "recommendation": "Recommendation",
+  "share_report": "Share Report",
+  "find_lab": "Find Testing Lab"
+}

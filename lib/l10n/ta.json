@@ -1,0 +1,17 @@
+{
+  "app_title": "LactoGuard AI",
+  "detect_adulteration": "பால் கலப்படத்தை கண்டறியுங்கள்",
+  "subtitle": "பால் பொடி தயாரிப்புகளுக்கான AI பரிசோதனை",
+  "enter_product": "பால் தயாரிப்பு பெயரை உள்ளிடவும்",
+  "analyze": "இப்போது பரிசோதிக்கவும்",
+  "features": "சிறப்பு அம்சங்கள்",
+  "barcode_verify": "பார்கோட் சரிபார்ப்பு",
+  "brand_compare": "பிராண்ட் ஒப்பீடு",
+  "nearby_labs": "அருகிலுள்ள ஆய்வகங்கள்",
+  "scan_history": "ஸ்கேன் வரலாறு",
+  "purity_score": "தூய்மை மதிப்பெண்",
+  "risk_level": "ஆபத்து நிலை",
+  "recommendation": "பரிந்துரை",
+  "share_report": "அறிக்கையைப் பகிரவும்",
+  "find_lab": "சோதனை ஆய்வகத்தைக் கண்டுபிடி"
+}
