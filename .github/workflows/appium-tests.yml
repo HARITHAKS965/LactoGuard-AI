@@ -26,6 +26,13 @@ jobs:
           npm ci || npm install
           npm test || true
 
+      - name: Install & Run collabroom-tests/appium
+        if: always()
+        working-directory: collabroom-tests/appium
+        run: |
+          npm ci || npm install
+          npm test || true
+
       - name: Upload Appium Excel Test Reports Artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -33,3 +40,4 @@ jobs:
           name: appium-test-reports
           path: |
             appium-tests/reports/*.xlsx
+            collabroom-tests/reports/*.xlsx
