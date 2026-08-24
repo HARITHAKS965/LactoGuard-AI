@@ -1,0 +1,15 @@
+{
+  "name": "load-performance-tests",
+  "version": "1.0.0",
+  "description": "LactoGuard-AI Load & Performance Automated Testing Suite",
+  "main": "tests/load-tests.js",
+  "scripts": {
+    "test": "jest --testMatch=\"<rootDir>/tests/load-tests.js\" --runInBand --detectOpenHandles --forceExit"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
