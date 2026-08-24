@@ -1,6 +1,5 @@
 const { Builder } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const chromedriver = require('chromedriver');
 
 async function createWebDriver() {
   const options = new chrome.Options();
@@ -13,11 +12,8 @@ async function createWebDriver() {
     '--remote-allow-origins=*'
   );
 
-  const service = new chrome.ServiceBuilder(chromedriver.path);
-
   return new Builder()
     .forBrowser('chrome')
-    .setChromeService(service)
     .setChromeOptions(options)
     .build();
 }
