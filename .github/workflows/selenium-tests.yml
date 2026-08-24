@@ -33,15 +33,15 @@ jobs:
       - name: Install & Run selenium-tests (300 E2E Tests)
         working-directory: selenium-tests
         run: |
-          npm install
-          npm test || true
+          npm ci || npm install
+          npm test
 
       - name: Install & Run collabroom-tests/selenium
         if: always()
         working-directory: collabroom-tests/selenium
         run: |
-          npm install
-          npm test || true
+          npm ci || npm install
+          npm test
 
       - name: Upload Excel Test Reports Artifact
         if: always()

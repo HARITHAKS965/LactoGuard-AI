@@ -1,0 +1,35 @@
+name: Appium Mobile E2E Automated Tests & Excel Report Generation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  appium-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install & Run appium-tests (300 Mobile E2E Tests)
+        working-directory: appium-tests
+        run: |
+          npm ci || npm install
+          npm test
+
+      - name: Upload Appium Excel Test Reports Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-test-reports
+          path: |
+            appium-tests/reports/*.xlsx
