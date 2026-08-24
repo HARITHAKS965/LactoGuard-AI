@@ -47,17 +47,17 @@ async function generateExcelReport() {
     fgColor: { argb: '4F46E5' }
   };
 
-  // 2. TEST DETAILS SHEET
-  const detailsSheet = workbook.addWorksheet('Test Details');
+  // 2. APPIUM TEST RESULTS SHEET (Exact format matching Selenium report)
+  const detailsSheet = workbook.addWorksheet('Appium Test Results');
   detailsSheet.columns = [
     { header: 'Test ID', key: 'testId', width: 12 },
-    { header: 'Test Name', key: 'testName', width: 55 },
-    { header: 'Category', key: 'category', width: 35 },
+    { header: 'Test Name', key: 'testName', width: 50 },
+    { header: 'Category', key: 'category', width: 32 },
     { header: 'Status', key: 'status', width: 12 },
-    { header: 'Execution Time (ms)', key: 'durationMs', width: 22 },
-    { header: 'Timestamp', key: 'timestamp', width: 28 },
     { header: 'Error Message', key: 'errorMessage', width: 40 },
-    { header: 'Environment', key: 'environment', width: 32 }
+    { header: 'Duration (ms)', key: 'durationMs', width: 18 },
+    { header: 'Timestamp', key: 'timestamp', width: 28 },
+    { header: 'Screenshot path', key: 'screenshotPath', width: 30 }
   ];
 
   detailsSheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
@@ -73,26 +73,27 @@ async function generateExcelReport() {
       testName: r.testName,
       category: r.category || 'Appium Mobile E2E',
       status: r.status,
+      errorMessage: r.errorMessage || 'N/A',
       durationMs: r.durationMs,
       timestamp: r.timestamp,
-      errorMessage: r.errorMessage || '',
-      environment: 'Appium Android / iOS Automation'
+      screenshotPath: r.screenshotPath || 'N/A'
     });
 
+    const statusCell = row.getCell(4);
     if (r.status === 'PASS') {
-      row.getCell('status').fill = {
+      statusCell.fill = {
         type: 'pattern',
         pattern: 'solid',
         fgColor: { argb: 'DCFCE7' }
       };
-      row.getCell('status').font = { color: { argb: '166534' }, bold: true };
+      statusCell.font = { color: { argb: '15803D' }, bold: true };
     } else {
-      row.getCell('status').fill = {
+      statusCell.fill = {
         type: 'pattern',
         pattern: 'solid',
         fgColor: { argb: 'FEE2E2' }
       };
-      row.getCell('status').font = { color: { argb: '991B1B' }, bold: true };
+      statusCell.font = { color: { argb: 'B91C1C' }, bold: true };
     }
   });
 
