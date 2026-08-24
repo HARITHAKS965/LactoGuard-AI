@@ -31,14 +31,14 @@ jobs:
           sleep 3
 
       - name: Install & Run selenium-tests (300 E2E Tests)
-        cwd: selenium-tests
+        working-directory: selenium-tests
         run: |
           npm install
           npm test || true
 
       - name: Install & Run collabroom-tests/selenium
         if: always()
-        cwd: collabroom-tests/selenium
+        working-directory: collabroom-tests/selenium
         run: |
           npm install
           npm test || true
