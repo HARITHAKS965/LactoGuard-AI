@@ -75,7 +75,7 @@ export async function generateExcelReport(reportPath?: string): Promise<string> 
       screenshotPath: res.screenshotPath || 'N/A'
     });
 
-    const statusCell = row.getCell('status');
+    const statusCell = row.getCell(4);
     if (res.status === 'PASS') {
       statusCell.font = { color: { argb: '15803D' }, bold: true };
     } else {
