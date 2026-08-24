@@ -1,46 +1,932 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="lactoguard_ai">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>lactoguard_ai</title>
-  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collabroom - Creator & Brand Collaboration Platform</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #0f172a; color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
+    header { background-color: #1e293b; border-bottom: 1px solid #334155; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 1.25rem; font-weight: 700; color: #38bdf8; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    nav { display: flex; gap: 12px; align-items: center; }
+    nav button, nav a { background: transparent; border: none; color: #94a3b8; padding: 8px 14px; border-radius: 6px; font-weight: 500; cursor: pointer; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+    nav button:hover, nav button.active { color: #f8fafc; background-color: #334155; }
+    .auth-buttons { display: flex; gap: 10px; align-items: center; }
+    .btn-primary { background-color: #0284c7; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-primary:hover { background-color: #0369a1; }
+    .btn-secondary { background-color: #334155; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-danger { background-color: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    main { flex: 1; padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 0.875rem; color: #cbd5e1; }
+    .form-control { width: 100%; padding: 10px 14px; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 0.95rem; }
+    .form-control:focus { outline: none; border-color: #38bdf8; }
+    .alert-error { background-color: #450a0a; border: 1px solid #991b1b; color: #fca5a5; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.875rem; }
+    .alert-success { background-color: #064e3b; border: 1px solid #065f46; color: #6ee7b7; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.875rem; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-content { background-color: #1e293b; border: 1px solid #475569; border-radius: 8px; padding: 24px; max-width: 500px; width: 90%; }
+    .hidden { display: none !important; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .badge-success { background-color: #065f46; color: #34d399; }
+    .badge-warning { background-color: #78350f; color: #fbbf24; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { text-align: left; padding: 12px; border-bottom: 1px solid #334155; }
+    th { color: #94a3b8; font-weight: 600; font-size: 0.85rem; }
+  </style>
 </head>
-<body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+<body data-theme="dark">
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo" data-testid="app-logo">⚡ Collabroom</a>
+    
+    <nav id="main-nav">
+      <button data-testid="nav-dashboard-tab" id="nav-dashboard-btn" class="active" onclick="switchTab('dashboard')">Dashboard</button>
+      <button data-testid="nav-discover-tab" id="nav-discover-btn" onclick="switchTab('discover')">Discover</button>
+      <button data-testid="nav-campaigns-tab" id="nav-campaigns-btn" onclick="switchTab('campaigns')">Campaigns</button>
+      <button data-testid="nav-wallet-tab" id="nav-wallet-btn" onclick="switchTab('wallet')">Wallet</button>
+      <button data-testid="nav-contracts-tab" id="nav-contracts-btn" onclick="switchTab('contracts')">Contracts</button>
+      <button data-testid="nav-messages-tab" id="nav-messages-btn" onclick="switchTab('messages')">Messages</button>
+      <button data-testid="nav-profile-tab" id="nav-profile-btn" onclick="switchTab('profile')">Profile</button>
+      <button data-testid="nav-settings-tab" id="nav-settings-btn" onclick="switchTab('settings')">Settings</button>
+      <button data-testid="nav-admin-tab" id="nav-admin-btn" onclick="switchTab('admin')">Admin</button>
+    </nav>
+
+    <div class="auth-buttons">
+      <!-- Notifications -->
+      <div style="position: relative;">
+        <button data-testid="notifications-bell-btn" id="notifications-bell-btn" onclick="toggleNotifications()" style="position: relative; background: #334155; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+          🔔 <span data-testid="notifications-badge-count" id="notifications-count-badge" class="badge badge-warning" style="position: absolute; top: -5px; right: -5px;">3</span>
+        </button>
+        <div data-testid="notifications-dropdown" id="notifications-dropdown-menu" class="hidden card" style="position: absolute; right: 0; top: 45px; width: 300px; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h4 style="font-size: 0.9rem;">Notifications</h4>
+            <button data-testid="notifications-mark-all-read-btn" onclick="markAllNotificationsRead()" style="font-size: 0.75rem; background: none; border: none; color: #38bdf8; cursor: pointer;">Mark all read</button>
+          </div>
+          <div id="notifications-list-container">
+            <div data-testid="notification-item-1" style="font-size: 0.8rem; padding: 8px 0; border-bottom: 1px solid #334155;">
+              <span>New proposal received for Nike Summer Campaign</span>
+              <button data-testid="notification-mark-read-1" onclick="markNotificationRead(1)" style="font-size: 0.7rem; float: right; background: none; border: none; color: #94a3b8; cursor: pointer;">✓</button>
+            </div>
+            <div data-testid="notification-item-2" style="font-size: 0.8rem; padding: 8px 0; border-bottom: 1px solid #334155;">
+              <span>Contract signed by Creator Alex Johnson</span>
+            </div>
+            <div data-testid="notification-item-3" style="font-size: 0.8rem; padding: 8px 0;">
+              <span>Payout of $1,500 processed to bank</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span data-testid="user-session-badge" id="session-user-name" style="font-size: 0.85rem; color: #38bdf8; font-weight: 600;">Alex Johnson (Creator)</span>
+      <button data-testid="nav-login-btn" id="login-modal-open-btn" class="btn-secondary" onclick="openAuthModal('login')">Login</button>
+      <button data-testid="nav-register-btn" id="register-modal-open-btn" class="btn-primary" onclick="openAuthModal('register')">Register</button>
+      <button data-testid="nav-logout-btn" id="logout-act-btn" class="btn-danger hidden" onclick="performLogout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Protected Route Banner when unauthenticated -->
+  <div data-testid="protected-route-banner" id="protected-access-banner" class="hidden alert-error" style="border-radius: 0; margin: 0; text-align: center;">
+    🔒 Protected Route: Authentication required. Please login to view protected content.
+  </div>
+
+  <main>
+
+    <!-- SECTION: AUTH MODALS & VIEWS -->
+    <div id="auth-modal-overlay" class="modal-overlay hidden">
+      <div class="modal-content">
+        <!-- LOGIN FORM -->
+        <div id="auth-form-login">
+          <h2>Login to Collabroom</h2>
+          <div data-testid="login-error-msg" id="login-error" class="alert-error hidden">Invalid email or password</div>
+          <form onsubmit="handleLoginSubmit(event)">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input data-testid="login-email-input" id="login-email" type="text" class="form-control" required placeholder="alex@creator.com">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input data-testid="login-password-input" id="login-password" type="password" class="form-control" required placeholder="••••••••">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <button data-testid="nav-forgot-password-btn" type="button" onclick="switchAuthView('forgot')" style="background: none; border: none; color: #38bdf8; cursor: pointer; font-size: 0.85rem;">Forgot Password?</button>
+            </div>
+            <button data-testid="login-submit-btn" type="submit" class="btn-primary" style="width: 100%;">Sign In</button>
+          </form>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="auth-form-register" class="hidden">
+          <h2>Create Collabroom Account</h2>
+          <div data-testid="register-error-msg" id="register-error" class="alert-error hidden">Error submitting registration</div>
+          <form onsubmit="handleRegisterSubmit(event)">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input data-testid="register-name-input" id="register-name" type="text" class="form-control" required placeholder="John Doe">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input data-testid="register-email-input" id="register-email" type="text" class="form-control" required placeholder="user@example.com">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input data-testid="register-password-input" id="register-password" type="password" class="form-control" required placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Account Role</label>
+              <div style="display: flex; gap: 10px;">
+                <button data-testid="register-role-creator-btn" type="button" id="role-creator-btn" class="btn-primary" style="flex: 1;" onclick="selectRegisterRole('creator')">Creator</button>
+                <button data-testid="register-role-brand-btn" type="button" id="role-brand-btn" class="btn-secondary" style="flex: 1;" onclick="selectRegisterRole('brand')">Brand</button>
+              </div>
+            </div>
+            <button data-testid="register-submit-btn" type="submit" class="btn-primary" style="width: 100%;">Create Account</button>
+          </form>
+        </div>
+
+        <!-- FORGOT PASSWORD FORM -->
+        <div id="auth-form-forgot" class="hidden">
+          <h2>Reset Password</h2>
+          <div data-testid="forgot-error-msg" id="forgot-error" class="alert-error hidden">Email address not found</div>
+          <div data-testid="forgot-success-msg" id="forgot-success" class="alert-success hidden">Password reset link sent to email</div>
+          <form onsubmit="handleForgotSubmit(event)">
+            <div class="form-group">
+              <label>Enter Registered Email</label>
+              <input data-testid="forgot-email-input" id="forgot-email" type="text" class="form-control" required placeholder="alex@creator.com">
+            </div>
+            <button data-testid="forgot-submit-btn" type="submit" class="btn-primary" style="width: 100%;">Send Reset Link</button>
+          </form>
+        </div>
+
+        <!-- RESET PASSWORD FORM -->
+        <div id="auth-form-reset" class="hidden">
+          <h2>Update Password</h2>
+          <div data-testid="reset-error-msg" id="reset-error" class="alert-error hidden">Passwords do not match</div>
+          <div data-testid="reset-success-msg" id="reset-success" class="alert-success hidden">Password successfully updated!</div>
+          <form onsubmit="handleResetSubmit(event)">
+            <div class="form-group">
+              <label>New Password</label>
+              <input data-testid="reset-password-input" id="reset-password" type="password" class="form-control" required placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <input data-testid="reset-confirm-password-input" id="reset-confirm-password" type="password" class="form-control" required placeholder="••••••••">
+            </div>
+            <button data-testid="reset-submit-btn" type="submit" class="btn-primary" style="width: 100%;">Update Password</button>
+          </form>
+        </div>
+
+        <div style="margin-top: 16px; text-align: center;">
+          <button data-testid="modal-close-btn" onclick="closeAuthModal()" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONBOARDING FLOW MODAL / SCREEN -->
+    <div id="onboarding-container" class="card hidden">
+      <h2>Welcome to Collabroom Onboarding</h2>
+      <p style="color: #94a3b8; margin-bottom: 20px;">Complete your account profile to start collaborating.</p>
+      
+      <div class="form-group">
+        <label>Selected Role</label>
+        <select data-testid="onboarding-role-select" id="onboarding-role" class="form-control">
+          <option value="creator">Content Creator</option>
+          <option value="brand">Brand Partner</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Short Bio</label>
+        <textarea data-testid="onboarding-bio-input" id="onboarding-bio" class="form-control" rows="3" placeholder="Tech reviewer and lifestyle content creator..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Primary Social Account Handle</label>
+        <input data-testid="onboarding-social-input" id="onboarding-social" type="text" class="form-control" placeholder="@alex_tech">
+      </div>
+      <div class="form-group">
+        <label>Primary Niche / Category</label>
+        <select data-testid="onboarding-niche-select" id="onboarding-niche" class="form-control">
+          <option value="tech">Tech & Gadgets</option>
+          <option value="fashion">Fashion & Lifestyle</option>
+          <option value="fitness">Fitness & Health</option>
+          <option value="gaming">Gaming & Esports</option>
+        </select>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <button data-testid="onboarding-skip-btn" onclick="completeOnboarding(true)" class="btn-secondary">Skip for Now</button>
+        <button data-testid="onboarding-complete-btn" onclick="completeOnboarding(false)" class="btn-primary">Complete Setup</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: DASHBOARD -->
+    <div id="tab-dashboard" class="tab-view">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Dashboard Overview</h2>
+        <div>
+          <button data-testid="ai-brief-open-btn" class="btn-primary" onclick="openAIBriefModal()">✨ AI Brief Generator</button>
+        </div>
+      </div>
+
+      <div data-testid="dashboard-metrics-container" class="grid" style="margin-bottom: 24px;">
+        <div class="card">
+          <h4 style="color: #94a3b8; font-size: 0.85rem;">ACTIVE CAMPAIGNS</h4>
+          <p style="font-size: 1.8rem; font-weight: 700; color: #38bdf8; margin-top: 8px;">12</p>
+        </div>
+        <div class="card">
+          <h4 style="color: #94a3b8; font-size: 0.85rem;">TOTAL EARNINGS</h4>
+          <p style="font-size: 1.8rem; font-weight: 700; color: #34d399; margin-top: 8px;">$14,850.00</p>
+        </div>
+        <div class="card">
+          <h4 style="color: #94a3b8; font-size: 0.85rem;">PENDING INVITATIONS</h4>
+          <p style="font-size: 1.8rem; font-weight: 700; color: #fbbf24; margin-top: 8px;">4</p>
+        </div>
+      </div>
+
+      <!-- CREATOR ROLE SPECIFIC VIEW -->
+      <div data-testid="dashboard-creator-view" id="dashboard-creator-view" class="card">
+        <h3>Creator Dashboard Details</h3>
+        <p style="color: #cbd5e1; margin-top: 8px;">Your creator performance overview, pending campaign invites, and upcoming deliverable milestones.</p>
+        <div style="margin-top: 14px; background: #0f172a; padding: 14px; border-radius: 6px;">
+          <p style="font-size: 0.9rem;"><strong>Top Invites:</strong> Nike Summer Unboxing ($2,500), Samsung Galaxy S25 Review ($4,000)</p>
+        </div>
+      </div>
+
+      <!-- BRAND ROLE SPECIFIC VIEW -->
+      <div data-testid="dashboard-brand-view" id="dashboard-brand-view" class="card hidden">
+        <h3>Brand Management Overview</h3>
+        <p style="color: #cbd5e1; margin-top: 8px;">Manage active brand campaigns, review creator applicants, and monitor escrow balances.</p>
+        <div style="margin-top: 14px; background: #0f172a; padding: 14px; border-radius: 6px;">
+          <p style="font-size: 0.9rem;"><strong>Applicants Pending Review:</strong> 8 Creators awaiting campaign pitch response.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: DISCOVER -->
+    <div id="tab-discover" class="tab-view hidden">
+      <h2>Discover Creators & Brands</h2>
+      
+      <div class="card" style="margin-top: 16px;">
+        <div class="grid">
+          <div class="form-group">
+            <label>Search Keyword</label>
+            <input data-testid="discover-search-input" id="discover-search" type="text" class="form-control" placeholder="Search by name, handle, or brand..." oninput="filterDiscover()">
+          </div>
+          <div class="form-group">
+            <label>Category / Niche</label>
+            <select data-testid="discover-category-select" id="discover-category" class="form-control" onchange="filterDiscover()">
+              <option value="all">All Categories</option>
+              <option value="tech">Tech</option>
+              <option value="lifestyle">Lifestyle</option>
+              <option value="fitness">Fitness</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Follower Count</label>
+            <select data-testid="discover-followers-filter" id="discover-followers" class="form-control" onchange="filterDiscover()">
+              <option value="all">Any Followers</option>
+              <option value="10k">10k - 50k</option>
+              <option value="50k">50k - 250k</option>
+              <option value="250k">250k+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Engagement Rate</label>
+            <select data-testid="discover-engagement-filter" id="discover-engagement" class="form-control" onchange="filterDiscover()">
+              <option value="all">Any Engagement</option>
+              <option value="3%">> 3.0%</option>
+              <option value="5%">> 5.0%</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Brand Industry</label>
+            <input data-testid="discover-brand-industry-input" id="discover-industry" type="text" class="form-control" placeholder="e.g. Apparel, SaaS" oninput="filterDiscover()">
+          </div>
+          <div class="form-group">
+            <label>Budget Range</label>
+            <select data-testid="discover-budget-filter" id="discover-budget" class="form-control" onchange="filterDiscover()">
+              <option value="all">Any Budget</option>
+              <option value="1000">$500 - $2,000</option>
+              <option value="5000">$2,000 - $10,000</option>
+            </select>
+          </div>
+        </div>
+        <button data-testid="discover-reset-filters-btn" onclick="resetDiscoverFilters()" class="btn-secondary" style="margin-top: 10px;">Reset Filters</button>
+      </div>
+
+      <div class="grid" id="discover-results-grid">
+        <!-- Creator Card Preview 1 -->
+        <div data-testid="discover-creator-card-preview-1" class="card">
+          <h3>Alex Tech</h3>
+          <p style="color: #94a3b8; font-size: 0.85rem;">@alex_tech • 150k followers • 4.8% Engagement</p>
+          <p style="margin-top: 10px; font-size: 0.9rem;">Specializing in smartphone unboxing, gadget reviews, and custom PC builds.</p>
+          <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <button data-testid="discover-bookmark-btn-1" id="bookmark-btn-1" onclick="toggleBookmark(1)" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Bookmark</button>
+            <span data-testid="discover-bookmarked-status-1" id="bookmark-status-1" class="badge badge-success hidden" style="align-self: center;">Saved</span>
+            <button data-testid="discover-direct-message-btn-1" onclick="triggerDirectMessage('Alex Tech')" class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Direct Message</button>
+          </div>
+        </div>
+
+        <!-- Brand Card Preview 1 -->
+        <div data-testid="discover-brand-card-preview-1" class="card">
+          <h3>Apex Apparel</h3>
+          <p style="color: #94a3b8; font-size: 0.85rem;">Fitness & Sportswear • $5,000 Campaign Budget</p>
+          <p style="margin-top: 10px; font-size: 0.9rem;">Looking for fitness creators for summer launch campaign video reviews.</p>
+          <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <button data-testid="discover-view-campaign-btn-1" onclick="viewCampaignBriefModal('Apex Summer Launch')" class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">View Campaign</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CAMPAIGNS -->
+    <div id="tab-campaigns" class="tab-view hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Campaign Management</h2>
+        <button data-testid="create-campaign-open-btn" onclick="openCampaignCreationModal()" class="btn-primary">+ Create Campaign</button>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3>All Active Campaigns</h3>
+          <select data-testid="campaign-filter-status-select" id="campaign-filter-status" class="form-control" style="width: 200px;" onchange="filterCampaignsList()">
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+
+        <div data-testid="campaign-list-container" id="campaigns-list">
+          <div data-testid="campaign-card-details-1" class="card" style="background: #0f172a; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <h4>Nike Air Max Unboxing & Review</h4>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;">Budget: $2,500 • Status: Active • Deliverables: 1 YouTube Video + 2 Instagram Reels</p>
+              </div>
+              <span class="badge badge-success">Active</span>
+            </div>
+
+            <!-- Campaign pitch submission -->
+            <div style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 14px;">
+              <h5>Submit Creator Pitch</h5>
+              <div class="form-group" style="margin-top: 8px;">
+                <input data-testid="campaign-pitch-input" id="campaign-pitch" type="text" class="form-control" placeholder="Describe your concept pitch...">
+              </div>
+              <div class="form-group">
+                <input data-testid="campaign-quote-input" id="campaign-quote" type="number" class="form-control" placeholder="Quote amount ($)" value="2500">
+              </div>
+              <button data-testid="campaign-submit-pitch-btn" onclick="submitCampaignPitch()" class="btn-primary" style="padding: 6px 14px; font-size: 0.85rem;">Submit Pitch</button>
+            </div>
+
+            <!-- Applicants list -->
+            <div data-testid="campaign-applicants-list" style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 14px;">
+              <h5>Applicant Review</h5>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.85rem;">
+                <span>Creator Sam (Pitch: $2,200)</span>
+                <div>
+                  <button data-testid="applicant-accept-btn-1" onclick="acceptApplicant(1)" class="btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">Accept</button>
+                  <button data-testid="applicant-reject-btn-1" onclick="rejectApplicant(1)" class="btn-danger" style="padding: 4px 10px; font-size: 0.75rem;">Reject</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Milestones & Deliverables -->
+            <div style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 14px;">
+              <h5>Deliverable Milestones</h5>
+              <div class="form-group" style="margin-top: 8px;">
+                <input data-testid="milestone-deliverable-url-input" id="deliverable-url" type="text" class="form-control" placeholder="https://youtube.com/watch?v=sample">
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button data-testid="milestone-submit-btn" onclick="submitMilestone()" class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Submit Link</button>
+                <button data-testid="milestone-revision-btn" onclick="requestMilestoneRevision()" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Request Revision</button>
+                <button data-testid="milestone-approve-btn" onclick="approveMilestone()" class="btn-primary" style="background-color: #059669; padding: 6px 12px; font-size: 0.8rem;">Approve Deliverable</button>
+              </div>
+            </div>
+
+            <!-- Campaign Controls -->
+            <div style="margin-top: 16px; border-top: 1px solid #334155; padding-top: 14px; display: flex; gap: 10px;">
+              <button data-testid="campaign-edit-btn" onclick="editCampaign(1)" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Edit Parameters</button>
+              <button data-testid="campaign-pause-toggle" id="campaign-pause-btn" onclick="togglePauseCampaign(1)" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">Pause Campaign</button>
+              <button data-testid="campaign-cancel-btn" onclick="openCancelCampaignModal()" class="btn-danger" style="padding: 6px 12px; font-size: 0.8rem;">Cancel Campaign</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: WALLET -->
+    <div id="tab-wallet" class="tab-view hidden">
+      <h2>Wallet & Payouts</h2>
+
+      <div class="grid" style="margin-top: 16px; margin-bottom: 24px;">
+        <div class="card">
+          <h4 style="color: #94a3b8; font-size: 0.85rem;">AVAILABLE BALANCE</h4>
+          <p data-testid="wallet-balance-available" id="wallet-available-val" style="font-size: 2rem; font-weight: 700; color: #34d399; margin-top: 8px;">$5,420.00</p>
+          <button data-testid="wallet-withdraw-open-btn" onclick="openWithdrawModal()" class="btn-primary" style="margin-top: 14px; width: 100%;">Withdraw Funds</button>
+        </div>
+        <div class="card">
+          <h4 style="color: #94a3b8; font-size: 0.85rem;">ESCROW / PENDING</h4>
+          <p data-testid="wallet-balance-pending" id="wallet-pending-val" style="font-size: 2rem; font-weight: 700; color: #fbbf24; margin-top: 8px;">$2,500.00</p>
+          <button data-testid="razorpay-trigger-btn" onclick="openRazorpayModal()" class="btn-secondary" style="margin-top: 14px; width: 100%;">Add Funds via Card</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3>Transaction History</h3>
+          <select data-testid="wallet-filter-type-select" id="wallet-filter-type" class="form-control" style="width: 180px;" onchange="filterWalletTransactions()">
+            <option value="all">All Types</option>
+            <option value="credit">Payout Credits</option>
+            <option value="escrow">Escrow Holds</option>
+            <option value="debit">Withdrawals</option>
+          </select>
+        </div>
+
+        <table data-testid="wallet-transactions-table">
+          <thead>
+            <tr>
+              <th>DATE</th>
+              <th>DESCRIPTION</th>
+              <th>TYPE</th>
+              <th>AMOUNT</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="wallet-transactions-body">
+            <tr>
+              <td>2026-07-25</td>
+              <td>Campaign Payout - Nike Unboxing</td>
+              <td><span class="badge badge-success">Credit</span></td>
+              <td>+$2,500.00</td>
+              <td>Completed</td>
+            </tr>
+            <tr>
+              <td>2026-07-20</td>
+              <td>Bank Transfer Withdrawal</td>
+              <td><span class="badge badge-warning">Debit</span></td>
+              <td>-$1,000.00</td>
+              <td>Completed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 5: CONTRACTS -->
+    <div id="tab-contracts" class="tab-view hidden">
+      <h2>Contract Management</h2>
+
+      <div data-testid="contract-view-container" class="card" style="margin-top: 16px;">
+        <h3>Campaign Standard Agreement #COL-8821</h3>
+        <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;">Parties: Apex Apparel (Brand) & Alex Tech (Creator)</p>
+        
+        <div style="background: #0f172a; padding: 16px; border-radius: 6px; margin: 16px 0; font-size: 0.9rem; max-height: 150px; overflow-y: auto;">
+          <p>This Collaboration Agreement dictates terms of engagement, licensing rights, exclusivity for 30 days, and escrow release terms upon deliverable sign-off...</p>
+        </div>
+
+        <div class="form-group">
+          <label>Digital Signature (Type Full Legal Name)</label>
+          <input data-testid="contract-signature-input" id="contract-sig-input" type="text" class="form-control" placeholder="Alex Johnson">
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button data-testid="contract-sign-submit-btn" onclick="submitContractSignature()" class="btn-primary">Sign Contract</button>
+          <span data-testid="contract-status-signed-badge" id="contract-signed-badge" class="badge badge-success hidden">✓ Contract Executed</span>
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 14px;">
+          <label style="font-size: 0.85rem; color: #94a3b8;">Public Share Link:</label>
+          <br>
+          <a data-testid="public-contract-link" href="#" onclick="switchTab('public-contract'); return false;" style="color: #38bdf8; font-size: 0.85rem;">http://localhost:8081/#public-contract-COL-8821</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUBLIC CONTRACT ROUTE VIEW -->
+    <div id="tab-public-contract" class="tab-view hidden">
+      <div data-testid="public-contract-container" class="card">
+        <h2>Public Contract Verification Portal</h2>
+        <p style="color: #94a3b8; font-size: 0.85rem;">Accessing public agreement #COL-8821 without session required.</p>
+        
+        <div style="background: #0f172a; padding: 16px; border-radius: 6px; margin: 16px 0;">
+          <p style="font-size: 0.9rem;">Public Terms: Independent contractor agreement for video sponsorship content delivery.</p>
+        </div>
+
+        <button data-testid="public-contract-sign-btn" onclick="signPublicContract()" class="btn-primary">Acknowledge & Sign Public Copy</button>
+      </div>
+    </div>
+
+    <!-- TAB 6: MESSAGES -->
+    <div id="tab-messages" class="tab-view hidden">
+      <h2>Direct Messages</h2>
+
+      <div class="grid" style="grid-template-columns: 300px 1fr; margin-top: 16px;">
+        <div class="card" data-testid="messages-inbox-list">
+          <h4>Conversations</h4>
+          <div data-testid="messages-thread-item-1" onclick="openChatThread('Apex Apparel')" style="padding: 10px; background: #334155; border-radius: 6px; margin-top: 10px; cursor: pointer;">
+            <strong>Apex Apparel</strong>
+            <p style="font-size: 0.75rem; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hey Alex, checking on video edit progress...</p>
+          </div>
+        </div>
+
+        <div class="card" style="display: flex; flex-direction: column; height: 450px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px;">
+            <h4 id="chat-thread-title">Apex Apparel</h4>
+            <span data-testid="messages-realtime-badge" class="badge badge-success">● Connected</span>
+          </div>
+
+          <div data-testid="messages-history-container" id="chat-history" style="flex: 1; overflow-y: auto; padding: 10px 0;">
+            <div style="background: #0f172a; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; max-width: 80%;">
+              <p style="font-size: 0.85rem;">Looking forward to the campaign deliverables!</p>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #334155; padding-top: 10px;">
+            <div id="attachment-preview-box" class="hidden" data-testid="messages-attachment-preview" style="font-size: 0.75rem; color: #38bdf8; margin-bottom: 6px;">
+              📎 File Attached: storyboard_draft.pdf
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button data-testid="messages-attach-file-btn" onclick="attachFileToChat()" class="btn-secondary" style="padding: 8px 12px;">📎</button>
+              <input data-testid="messages-text-input" id="chat-input-text" type="text" class="form-control" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+              <button data-testid="messages-send-btn" onclick="sendChatMessage()" class="btn-primary">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: PROFILE -->
+    <div id="tab-profile" class="tab-view hidden">
+      <h2>User Profile</h2>
+
+      <div data-testid="profile-view-container" class="card" style="margin-top: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <h3 id="profile-display-name">Alex Johnson</h3>
+            <p data-testid="profile-bio-text" id="profile-bio-val" style="color: #94a3b8; font-size: 0.9rem; margin-top: 4px;">Tech reviewer and lifestyle content creator based in San Francisco.</p>
+          </div>
+          <button data-testid="profile-edit-open-btn" onclick="toggleProfileEditForm()" class="btn-secondary">Edit Profile</button>
+        </div>
+
+        <div id="profile-edit-form" class="hidden" style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 16px;">
+          <h4>Edit Profile Details</h4>
+          <div data-testid="profile-edit-validation-error" id="profile-edit-error" class="alert-error hidden">Please enter a valid URL</div>
+          
+          <div class="form-group">
+            <label>Display Name</label>
+            <input data-testid="profile-edit-name-input" id="edit-profile-name" type="text" class="form-control" value="Alex Johnson">
+          </div>
+          <div class="form-group">
+            <label>Bio</label>
+            <textarea data-testid="profile-edit-bio-input" id="edit-profile-bio" class="form-control" rows="2">Tech reviewer and lifestyle content creator based in San Francisco.</textarea>
+          </div>
+          <div class="form-group">
+            <label>Avatar Image URL</label>
+            <input data-testid="profile-edit-avatar-input" id="edit-profile-avatar" type="text" class="form-control" value="https://example.com/avatar.jpg">
+          </div>
+          <div class="form-group">
+            <label>Instagram Handle / Link</label>
+            <input data-testid="profile-edit-instagram-input" id="edit-profile-insta" type="text" class="form-control" value="https://instagram.com/alex_tech">
+          </div>
+          <div class="form-group">
+            <label>YouTube Channel Link</label>
+            <input data-testid="profile-edit-youtube-input" id="edit-profile-yt" type="text" class="form-control" value="https://youtube.com/@alextech">
+          </div>
+          <div class="form-group">
+            <label>TikTok Link</label>
+            <input data-testid="profile-edit-tiktok-input" id="edit-profile-tiktok" type="text" class="form-control" value="https://tiktok.com/@alex_tech">
+          </div>
+          <button data-testid="profile-edit-submit-btn" onclick="saveProfileEdit()" class="btn-primary">Save Profile Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 8: SETTINGS -->
+    <div id="tab-settings" class="tab-view hidden">
+      <h2>Account Settings</h2>
+
+      <div class="card" style="margin-top: 16px;">
+        <h3>Appearance</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+          <span>Theme Mode: <strong data-testid="settings-theme-status" id="theme-status-lbl">Dark Mode</strong></span>
+          <button data-testid="settings-theme-toggle" onclick="toggleTheme()" class="btn-secondary">Toggle Theme</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Security & Account</h3>
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Update Account Email</label>
+          <input data-testid="settings-security-email-input" id="settings-email" type="text" class="form-control" value="alex@creator.com">
+        </div>
+        <div class="form-group">
+          <label>New Security Password</label>
+          <input data-testid="settings-security-password-input" id="settings-password" type="password" class="form-control" placeholder="••••••••">
+        </div>
+        <button data-testid="settings-security-save-btn" onclick="saveSettingsSecurity()" class="btn-primary">Update Security Settings</button>
+      </div>
+
+      <div class="card">
+        <h3>Notification Preferences</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+          <label><input data-testid="settings-notification-email-checkbox" id="settings-pref-email" type="checkbox" checked> Email Digest Notifications</label>
+          <label><input data-testid="settings-notification-push-checkbox" id="settings-pref-push" type="checkbox" checked> Browser Push Notifications</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 9: ADMIN PANEL (6 Screens) -->
+    <div id="tab-admin" class="tab-view hidden">
+      <h2>Admin Operations Panel</h2>
+
+      <!-- Admin Login Overlay if not admin auth -->
+      <div id="admin-login-box" class="card" style="margin-top: 16px;">
+        <h3>Admin Authentication</h3>
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Admin Email</label>
+          <input data-testid="admin-login-email-input" id="admin-email" type="text" class="form-control" value="admin@collabroom.io">
+        </div>
+        <div class="form-group">
+          <label>Admin Password</label>
+          <input data-testid="admin-login-password-input" id="admin-password" type="password" class="form-control" value="admin123">
+        </div>
+        <button data-testid="admin-login-submit-btn" onclick="performAdminLogin()" class="btn-primary">Login as Admin</button>
+      </div>
+
+      <div id="admin-panel-content" class="hidden" style="margin-top: 16px;">
+        <!-- Admin Navigation Sub-tabs (6 Screens) -->
+        <div style="display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto;">
+          <button data-testid="admin-nav-dashboard-btn" onclick="switchAdminScreen('dashboard')" class="btn-secondary">1. Dashboard</button>
+          <button data-testid="admin-nav-users-btn" onclick="switchAdminScreen('users')" class="btn-secondary">2. Users</button>
+          <button data-testid="admin-nav-campaigns-btn" onclick="switchAdminScreen('campaigns')" class="btn-secondary">3. Campaigns</button>
+          <button data-testid="admin-nav-disputes-btn" onclick="switchAdminScreen('disputes')" class="btn-secondary">4. Disputes</button>
+          <button data-testid="admin-nav-announcements-btn" onclick="switchAdminScreen('announcements')" class="btn-secondary">5. Announcements</button>
+        </div>
+
+        <!-- Admin Screen 1: Dashboard -->
+        <div data-testid="admin-screen-dashboard" id="admin-sub-dashboard" class="card">
+          <h3>Admin System Dashboard</h3>
+          <div class="grid" style="margin-top: 14px;">
+            <div>Total Platform Users: <strong>1,420</strong></div>
+            <div>Active Campaigns: <strong>385</strong></div>
+            <div>Escrow Funds Volume: <strong>$142,000</strong></div>
+          </div>
+        </div>
+
+        <!-- Admin Screen 2: Users Management -->
+        <div data-testid="admin-screen-users" id="admin-sub-users" class="card hidden">
+          <h3>User Account Administration</h3>
+          <div class="form-group" style="margin-top: 12px;">
+            <input data-testid="admin-user-search-input" id="admin-user-search" type="text" class="form-control" placeholder="Search user account..." oninput="filterAdminUsers()">
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>USER</th>
+                <th>ROLE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alex Johnson</td>
+                <td>Creator</td>
+                <td><span data-testid="admin-user-status-1" id="admin-user-status-val-1" class="badge badge-success">Active</span></td>
+                <td><button data-testid="admin-user-suspend-btn-1" onclick="toggleUserSuspend(1)" class="btn-danger" style="padding: 4px 8px; font-size: 0.75rem;">Suspend</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Admin Screen 3: Campaign Moderation -->
+        <div data-testid="admin-screen-campaigns" id="admin-sub-campaigns" class="card hidden">
+          <h3>Campaign Moderation</h3>
+          <table data-testid="admin-campaign-audit-table">
+            <thead>
+              <tr>
+                <th>CAMPAIGN</th>
+                <th>BRAND</th>
+                <th>BUDGET</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nike Air Max Unboxing</td>
+                <td>Nike Global</td>
+                <td>$2,500</td>
+                <td>Approved</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Admin Screen 4: Disputes Escalation -->
+        <div data-testid="admin-screen-disputes" id="admin-sub-disputes" class="card hidden">
+          <h3>Dispute Resolutions</h3>
+          <div data-testid="admin-dispute-item-1" class="card" style="background: #0f172a; margin-top: 10px;">
+            <h4>Dispute #DSP-904 (Apex Apparel vs Creator Sam)</h4>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Reason: Delayed deliverable submission past deadline.</p>
+            <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
+              <span data-testid="admin-dispute-status-1" id="dispute-status-lbl-1" class="badge badge-warning">Pending Resolution</span>
+              <button data-testid="admin-dispute-resolve-refund-btn" onclick="resolveDisputeRefund(1)" class="btn-primary" style="padding: 4px 10px; font-size: 0.75rem;">Issue Refund to Brand</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Screen 5: System Announcements -->
+        <div data-testid="admin-screen-announcements" id="admin-sub-announcements" class="card hidden">
+          <h3>Broadcast Announcement</h3>
+          <div data-testid="admin-announcement-toast" id="admin-toast-msg" class="alert-success hidden">Announcement published to platform!</div>
+          <div class="form-group" style="margin-top: 12px;">
+            <label>Announcement Headline</label>
+            <input data-testid="admin-announcement-title-input" id="announcement-title" type="text" class="form-control" placeholder="Scheduled Platform Maintenance">
+          </div>
+          <div class="form-group">
+            <label>Message Content</label>
+            <textarea data-testid="admin-announcement-content-input" id="announcement-content" class="form-control" rows="3" placeholder="Platform will undergo routine maintenance on Sunday..."></textarea>
+          </div>
+          <button data-testid="admin-announcement-publish-btn" onclick="publishAnnouncement()" class="btn-primary">Publish Announcement</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CAMPAIGN CREATION MULTI-STEP -->
+    <div id="campaign-creation-modal" class="modal-overlay hidden">
+      <div class="modal-content" style="max-width: 600px;">
+        <h3>Create New Campaign</h3>
+        <div data-testid="campaign-form-validation-error" id="campaign-form-error" class="alert-error hidden">Please complete all required fields</div>
+
+        <!-- STEP 1 -->
+        <div data-testid="campaign-form-step-1" id="camp-step-1">
+          <h4>Step 1: Campaign Details</h4>
+          <div class="form-group" style="margin-top: 12px;">
+            <label>Campaign Title</label>
+            <input data-testid="campaign-title-input" id="new-camp-title" type="text" class="form-control" placeholder="Summer Wear Review">
+          </div>
+          <div class="form-group">
+            <label>Target Category</label>
+            <select data-testid="campaign-category-select" id="new-camp-category" class="form-control">
+              <option value="fashion">Fashion & Lifestyle</option>
+              <option value="tech">Tech & Gadgets</option>
+            </select>
+          </div>
+          <button data-testid="campaign-step-1-next-btn" onclick="nextCampaignStep(2)" class="btn-primary" style="width: 100%;">Next: Deliverables</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div data-testid="campaign-form-step-2" id="camp-step-2" class="hidden">
+          <h4>Step 2: Deliverables & Timeline</h4>
+          <div class="form-group" style="margin-top: 12px;">
+            <label>Deliverables Description</label>
+            <input data-testid="campaign-deliverables-input" id="new-camp-deliverables" type="text" class="form-control" placeholder="1 Video Reel + 1 Story">
+          </div>
+          <div class="form-group">
+            <label>Timeline / Deadline</label>
+            <input data-testid="campaign-timeline-input" id="new-camp-timeline" type="text" class="form-control" placeholder="14 Days">
+          </div>
+          <button data-testid="campaign-step-2-next-btn" onclick="nextCampaignStep(3)" class="btn-primary" style="width: 100%;">Next: Budget</button>
+        </div>
+
+        <!-- STEP 3 -->
+        <div data-testid="campaign-form-step-3" id="camp-step-3" class="hidden">
+          <h4>Step 3: Budget & Compensation</h4>
+          <div class="form-group" style="margin-top: 12px;">
+            <label>Budget ($ USD)</label>
+            <input data-testid="campaign-budget-input" id="new-camp-budget" type="number" class="form-control" placeholder="1500">
+          </div>
+          <div class="form-group">
+            <label>Compensation Model</label>
+            <select data-testid="campaign-compensation-select" id="new-camp-comp" class="form-control">
+              <option value="fixed">Fixed Rate</option>
+              <option value="performance">Performance Bonus</option>
+            </select>
+          </div>
+          <button data-testid="campaign-step-3-next-btn" onclick="nextCampaignStep(4)" class="btn-primary" style="width: 100%;">Next: Review</button>
+        </div>
+
+        <!-- STEP 4 -->
+        <div data-testid="campaign-form-step-4" id="camp-step-4" class="hidden">
+          <h4>Step 4: Review & Publish</h4>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin: 12px 0;">Review your campaign settings before publishing to creators.</p>
+          <div style="display: flex; gap: 10px;">
+            <button data-testid="campaign-save-draft-btn" onclick="saveCampaignDraft()" class="btn-secondary" style="flex: 1;">Save Draft</button>
+            <button data-testid="campaign-publish-btn" onclick="publishCampaign()" class="btn-primary" style="flex: 1;">Publish Campaign</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; text-align: center;">
+          <button onclick="closeCampaignCreationModal()" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: AI BRIEF GENERATOR -->
+    <div data-testid="ai-brief-modal" id="ai-brief-modal-overlay" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3>✨ AI Brief Generator</h3>
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Campaign Goals</label>
+          <input data-testid="ai-brief-goals-input" id="ai-goals-input" type="text" class="form-control" placeholder="Increase summer footwear sales...">
+        </div>
+        <div class="form-group">
+          <label>Target Audience</label>
+          <input data-testid="ai-brief-audience-input" id="ai-audience-input" type="text" class="form-control" placeholder="Gen Z fitness enthusiasts...">
+        </div>
+        <button data-testid="ai-brief-generate-btn" onclick="generateAIBrief()" class="btn-primary" style="width: 100%;">Generate AI Brief</button>
+
+        <div id="ai-output-container" class="hidden" style="margin-top: 16px; background: #0f172a; padding: 12px; border-radius: 6px;">
+          <p data-testid="ai-brief-output-text" id="ai-generated-text" style="font-size: 0.85rem; color: #38bdf8;"></p>
+          <button data-testid="ai-brief-apply-btn" onclick="applyAIBriefToCampaign()" class="btn-primary" style="margin-top: 10px; padding: 4px 10px; font-size: 0.75rem;">Apply to Campaign Form</button>
+        </div>
+        <div style="margin-top: 16px; text-align: center;">
+          <button onclick="closeAIBriefModal()" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: WALLET WITHDRAWAL -->
+    <div data-testid="wallet-withdraw-modal" id="wallet-withdraw-modal-overlay" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3>Withdraw Funds to Bank Account</h3>
+        <div data-testid="wallet-withdraw-error-msg" id="withdraw-error" class="alert-error hidden">Amount exceeds available wallet balance</div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Bank Account Number / IBAN</label>
+          <input data-testid="wallet-bank-account-input" id="withdraw-bank-account" type="text" class="form-control" placeholder="US9012830192830129">
+        </div>
+        <div class="form-group">
+          <label>Amount to Withdraw ($ USD)</label>
+          <input data-testid="wallet-withdraw-amount-input" id="withdraw-amount" type="number" class="form-control" placeholder="500">
+        </div>
+        <button data-testid="wallet-withdraw-submit-btn" onclick="submitWithdrawal()" class="btn-primary" style="width: 100%;">Confirm Withdrawal</button>
+        <div style="margin-top: 16px; text-align: center;">
+          <button onclick="closeWithdrawModal()" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: FAKE RAZORPAY PAYMENT GATEWAY -->
+    <div data-testid="razorpay-modal" id="razorpay-modal-overlay" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3>💳 Razorpay Gateway Simulation</h3>
+        <span data-testid="razorpay-success-badge" id="razorpay-success" class="badge badge-success hidden">Payment Processed Successfully!</span>
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Card Number</label>
+          <input data-testid="razorpay-card-number-input" id="rzp-card" type="text" class="form-control" placeholder="4532 9012 3456 7890">
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <div class="form-group" style="flex: 1;">
+            <label>Expiry (MM/YY)</label>
+            <input data-testid="razorpay-card-expiry-input" id="rzp-exp" type="text" class="form-control" placeholder="12/28">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>CVV</label>
+            <input data-testid="razorpay-card-cvv-input" id="rzp-cvv" type="text" class="form-control" placeholder="123">
+          </div>
+        </div>
+        <button data-testid="razorpay-submit-btn" onclick="submitRazorpayPayment()" class="btn-primary" style="width: 100%;">Pay Now ($500.00)</button>
+        <div style="margin-top: 16px; text-align: center;">
+          <button onclick="closeRazorpayModal()" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CANCEL CAMPAIGN CONFIRMATION -->
+    <div data-testid="campaign-cancel-confirm-modal" id="cancel-campaign-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3>Confirm Campaign Cancellation</h3>
+        <p style="font-size: 0.85rem; color: #cbd5e1; margin: 12px 0;">Are you sure you want to cancel this campaign? Escrow funds will be returned.</p>
+        <button data-testid="campaign-confirm-cancel-btn" onclick="confirmCancelCampaign()" class="btn-danger" style="width: 100%;">Yes, Cancel Campaign</button>
+        <div style="margin-top: 16px; text-align: center;">
+          <button onclick="closeCancelCampaignModal()" class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;">Go Back</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOATING SUPPORT ASSISTANT WIDGET -->
+    <button data-testid="support-assistant-open-btn" onclick="openSupportAssistant()" style="position: fixed; bottom: 20px; right: 20px; border-radius: 50%; width: 50px; height: 50px; background: #0284c7; color: white; border: none; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 999;">💬</button>
+
+    <div data-testid="support-assistant-widget" id="support-widget" class="card hidden" style="position: fixed; bottom: 80px; right: 20px; width: 320px; height: 400px; z-index: 1000; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+        <h4>Support Assistant</h4>
+        <button data-testid="support-assistant-close-btn" onclick="closeSupportAssistant()" style="background: none; border: none; color: #94a3b8; cursor: pointer;">✕</button>
+      </div>
+      <div id="support-chat-log" style="flex: 1; overflow-y: auto; padding: 10px 0; font-size: 0.85rem;">
+        <div style="background: #0f172a; padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+          Hello! How can I assist you with Collabroom today?
+        </div>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <input data-testid="support-chat-input" id="support-input-text" type="text" class="form-control" placeholder="Ask a question..." style="font-size: 0.8rem;">
+        <button data-testid="support-chat-send-btn" onclick="sendSupportMessage()" class="btn-primary" style="padding: 6px 10px; font-size: 0.8rem;">Send</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>

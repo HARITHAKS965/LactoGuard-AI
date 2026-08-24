@@ -1,0 +1,17 @@
+{
+  "name": "selenium-tests",
+  "version": "1.0.0",
+  "description": "Selenium E2E 300 Test Cases Suite for Collabroom Web Frontend",
+  "main": "tests/login-tests.js",
+  "scripts": {
+    "test": "jest --testMatch=\"<rootDir>/tests/login-tests.js\" --runInBand --detectOpenHandles --forceExit"
+  },
+  "dependencies": {
+    "chromedriver": "^150.0.0",
+    "exceljs": "^4.4.0",
+    "selenium-webdriver": "^4.28.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

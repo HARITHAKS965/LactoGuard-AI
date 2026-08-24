@@ -1,0 +1,22 @@
+{
+  "name": "collabroom-selenium-tests",
+  "version": "1.0.0",
+  "description": "100 Selenium automated tests for Collabroom Web Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "selenium-webdriver": "^4.22.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.9",
+    "@types/selenium-webdriver": "^4.1.23",
+    "chromedriver": "^150.0.4",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.5.2"
+  }
+}

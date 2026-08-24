@@ -1,0 +1,11 @@
+{
+  "name": "collabroom-web",
+  "version": "1.0.0",
+  "description": "Collabroom Web Application",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y http-server ./ -p 8081",
+    "dev": "npx -y http-server ./ -p 8081"
+  },
+  "dependencies": {}
+}
