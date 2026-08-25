@@ -9,6 +9,7 @@ import 'history_screen.dart';
 import 'brand_compare_screen.dart';
 import 'settings_screen.dart';
 import 'seed_screen.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,6 +69,12 @@ class _HomeScreenState extends State<HomeScreen>
     );
     if (confirm == true) {
       await FirebaseAuth.instance.signOut();
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false,
+        );
+      }
     }
   }
 

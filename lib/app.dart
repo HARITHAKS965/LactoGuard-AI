@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/result_screen.dart';
 import 'models/lacto_result.dart';
@@ -9,7 +11,7 @@ import 'core/theme.dart';
 class LactoGuardApp extends StatelessWidget {
   const LactoGuardApp({super.key});
 
-  Widget _buildReportOrHome() {
+  Widget? _checkReportUrl() {
     try {
       final base = Uri.base;
       String? pName;
@@ -75,8 +77,7 @@ class LactoGuardApp extends StatelessWidget {
     } catch (e) {
       debugPrint('Report URL parsing error: $e');
     }
-
-    return const HomeScreen();
+    return null;
   }
 
   @override
@@ -88,14 +89,31 @@ class LactoGuardApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       theme: LactoGuardTheme.light,
-      home: _buildReportOrHome(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          final reportWidget = _checkReportUrl();
+          if (reportWidget != null) return reportWidget;
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            return const HomeScreen();
+          }
+          return const LoginScreen();
+        },
+      ),
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (_) => _buildReportOrHome(),
-        );
+        final reportWidget = _checkReportUrl();
+        if (reportWidget != null) {
+          return MaterialPageRoute(builder: (_) => reportWidget);
+        }
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
       },
       routes: {
         '/splash': (_) => const SplashScreen(),
+        '/login': (_) => const LoginScreen(),
         '/home': (_) => const HomeScreen(),
       },
     );
