@@ -163,125 +163,120 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 850),
-          child: ValueListenableBuilder<Box<ScanRecord>>(
-            valueListenable: Hive.box<ScanRecord>('lactoguard_history').listenable(),
-            builder: (context, hiveBox, _) {
-              final List<Map<String, dynamic>> displayList = [];
+      body: ValueListenableBuilder<Box<ScanRecord>>(
+        valueListenable: Hive.box<ScanRecord>('lactoguard_history').listenable(),
+        builder: (context, hiveBox, _) {
+          final List<Map<String, dynamic>> displayList = [];
 
-              if (_syncedScans.isNotEmpty) {
-                displayList.addAll(_syncedScans);
-              } else {
-                final hiveRecords = hiveBox.values.toList().reversed.toList();
-                for (final r in hiveRecords) {
-                  displayList.add({
-                    'productName': r.productName,
-                    'purityScore': r.purityScore,
-                    'riskLevel': r.riskLevel,
-                    'recommendation': r.recommendation,
-                    'scannedAt': r.scannedAt.toIso8601String(),
-                  });
-                }
+          if (_syncedScans.isNotEmpty) {
+            displayList.addAll(_syncedScans);
+          } else {
+            final hiveRecords = hiveBox.values.toList().reversed.toList();
+            for (final r in hiveRecords) {
+              displayList.add({
+                'productName': r.productName,
+                'purityScore': r.purityScore,
+                'riskLevel': r.riskLevel,
+                'recommendation': r.recommendation,
+                'scannedAt': r.scannedAt.toIso8601String(),
+              });
+            }
+          }
+
+          if (displayList.isEmpty && !_isLoading) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.history, size: 70, color: Colors.grey[300]),
+                  const SizedBox(height: 14),
+                  Text('No scans yet', style: TextStyle(fontSize: 18, color: Colors.grey[600], fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 6),
+                  Text('Analyze any milk product to see history here', style: TextStyle(color: Colors.grey[400], fontSize: 13)),
+                ],
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            itemCount: displayList.length,
+            itemBuilder: (context, index) {
+              final item = displayList[index];
+              final score = item['purityScore'] ?? 70;
+              final color = _riskColor(item['riskLevel']?.toString() ?? 'Medium');
+              final pName = item['productName']?.toString() ?? 'Unknown';
+              final rec = item['recommendation']?.toString() ?? '';
+
+              DateTime date = DateTime.now();
+              if (item['scannedAt'] != null) {
+                date = DateTime.tryParse(item['scannedAt'].toString()) ?? DateTime.now();
               }
 
-              if (displayList.isEmpty && !_isLoading) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.history, size: 70, color: Colors.grey[300]),
-                      const SizedBox(height: 14),
-                      Text('No scans yet', style: TextStyle(fontSize: 18, color: Colors.grey[600], fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 6),
-                      Text('Analyze any milk product to see history here', style: TextStyle(color: Colors.grey[400], fontSize: 13)),
-                    ],
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                itemCount: displayList.length,
-                itemBuilder: (context, index) {
-                  final item = displayList[index];
-                  final score = item['purityScore'] ?? 70;
-                  final color = _riskColor(item['riskLevel']?.toString() ?? 'Medium');
-                  final pName = item['productName']?.toString() ?? 'Unknown';
-                  final rec = item['recommendation']?.toString() ?? '';
-
-                  DateTime date = DateTime.now();
-                  if (item['scannedAt'] != null) {
-                    date = DateTime.tryParse(item['scannedAt'].toString()) ?? DateTime.now();
-                  }
-
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    elevation: 1.5,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                    child: ListTile(
-                      onTap: () => _openReport(item),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                      leading: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: color.withOpacity(0.12),
-                          border: Border.all(color: color, width: 2),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '$score%',
-                            style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 13),
-                          ),
-                        ),
+              return Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                elevation: 1.5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                child: ListTile(
+                  onTap: () => _openReport(item),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                  leading: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color.withOpacity(0.12),
+                      border: Border.all(color: color, width: 2),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$score%',
+                        style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 13),
                       ),
-                      title: Text(pName, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ),
+                  title: Text(pName, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Row(
                         children: [
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: color.withOpacity(0.12),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  'Risk: ${item['riskLevel'] ?? 'Medium'}',
-                                  style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                '${date.day}/${date.month}/${date.year} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
-                                style: TextStyle(fontSize: 11, color: Colors.grey[600]),
-                              ),
-                            ],
-                          ),
-                          if (rec.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              rec,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: color.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          ],
+                            child: Text(
+                              'Risk: ${item['riskLevel'] ?? 'Medium'}',
+                              style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${date.day}/${date.month}/${date.year} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
+                            style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                          ),
                         ],
                       ),
-                      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                    ),
-                  );
-                },
+                      if (rec.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          rec,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+                        ),
+                      ],
+                    ],
+                  ),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                ),
               );
             },
-          ),
-        ),
+          );
+        },
       ),
     );
   }
