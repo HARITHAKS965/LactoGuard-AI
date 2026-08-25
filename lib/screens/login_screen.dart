@@ -103,88 +103,88 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4FF),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Header
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(24, 50, 24, 30),
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF0A2463), Color(0xFF1565C0)],
-                    ),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(36),
-                      bottomRight: Radius.circular(36),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white24, width: 2),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.water_drop, size: 38, color: Color(0xFFFFB703)),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      const Text('LactoGuard AI', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
-                      const SizedBox(height: 4),
-                      const Text('Milk Purity. AI Powered. You Protected.', style: TextStyle(color: Colors.white70, fontSize: 13)),
-                      const SizedBox(height: 16),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white12,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              onTap: () => setState(() { _isLogin = true; _error = null; }),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: _isLogin ? const Color(0xFFFFB703) : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Text('Login', style: TextStyle(color: _isLogin ? Colors.black87 : Colors.white, fontWeight: FontWeight.w700)),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => setState(() { _isLogin = false; _error = null; }),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: !_isLogin ? const Color(0xFFFFB703) : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Text('Register', style: TextStyle(color: !_isLogin ? Colors.black87 : Colors.white, fontWeight: FontWeight.w700)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Full Width Edge-to-Edge Blue Header
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(24, 60, 24, 40),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF0A2463), Color(0xFF1565C0)],
                 ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(36),
+                  bottomRight: Radius.circular(36),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white24, width: 2),
+                    ),
+                    child: const Center(
+                      child: Icon(Icons.water_drop, size: 44, color: Color(0xFFFFB703)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('LactoGuard AI', style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                  const SizedBox(height: 4),
+                  const Text('Milk Purity. AI Powered. You Protected.', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                  const SizedBox(height: 20),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () => setState(() { _isLogin = true; _error = null; }),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: _isLogin ? const Color(0xFFFFB703) : Colors.transparent,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Text('Login', style: TextStyle(color: _isLogin ? Colors.black87 : Colors.white, fontWeight: FontWeight.w700)),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => setState(() { _isLogin = false; _error = null; }),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: !_isLogin ? const Color(0xFFFFB703) : Colors.transparent,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Text('Register', style: TextStyle(color: !_isLogin ? Colors.black87 : Colors.white, fontWeight: FontWeight.w700)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-                // Form
-                Padding(
-                  padding: const EdgeInsets.all(24),
+            // Form Content
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 460),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -310,9 +310,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
